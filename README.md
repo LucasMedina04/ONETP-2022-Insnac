@@ -32,3 +32,6 @@ _Agrega notas adicionales sobre que cosas se debe instalar, configurar y como ha
 ## Autores ✒️
 
 * **Lucas Medina** - *Desarrollo* - [LucasMedina04](https://github.com/LucasMedina04)
+* **Martín Morandini** - *Desarrollo* - [MMorandiniGit](https://github.com/MMorandiniGit)
+* **Lucas Felix** - *Desarrollo* - [LucasFelix240](https://github.com/LucasFelix240)
+
