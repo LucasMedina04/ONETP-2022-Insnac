@@ -25,8 +25,6 @@ _Agrega notas adicionales sobre que cosas se debe instalar, configurar y como ha
 
 ## Construido con 🛠️
 
-_Menciona las herramientas y versiones que utilizaste para crear tu proyecto_
-
 * [Visual Studio Code](https://code.visualstudio.com/#alt-downloads) - Editor de código.
 * [Visual Studio](https://visualstudio.microsoft.com/es/vs/) - Editor de código.
 * [MySQL Workbench](https://dev.mysql.com/downloads/workbench/) - Gestor de Bases de Datos.
@@ -36,7 +34,5 @@ _Menciona las herramientas y versiones que utilizaste para crear tu proyecto_
 Usamos [SemVer](http://semver.org/) para el versionado. Para todas las versiones disponibles, mira los [tags en este repositorio](https://github.com/ET12DE1Computacion/simpleTemplateCSharp/tags).
 
 ## Autores ✒️
-
-_Menciona a todos aquellos que ayudaron a levantar el proyecto desde sus inicios_
 
 * **Lucas Medina** - *Desarrollo* - [LucasMedina04](https://github.com/LucasMedina04)
