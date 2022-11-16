@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS `HospitalDB`.`Paciente` (
   `numTelefono` VARCHAR(45) NULL,
   `email` VARCHAR(45) NULL,
   `idZona` INT NOT NULL,
+  `tipoSangre` VARCHAR(3) NOT NULL,
   PRIMARY KEY (`idPaciente`),
   INDEX `fk_Paciente_Zona1_idx` (`idZona` ASC) VISIBLE,
   CONSTRAINT `fk_Paciente_Zona1`
@@ -137,7 +138,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `HospitalDB`.`ActivacionAlarma` (
   `idActivacionAlarma` INT NOT NULL AUTO_INCREMENT,
-  `codigo` VARCHAR(45) NOT NULL,
+  `tipo` VARCHAR(45) NOT NULL,
   `idZona` INT NOT NULL,
   `idBoton` INT NOT NULL,
   `fechaActivacion` DATETIME(3) NOT NULL,
