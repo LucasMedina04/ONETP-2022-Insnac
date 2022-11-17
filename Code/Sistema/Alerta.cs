@@ -1,13 +1,16 @@
+using System.Text;
+
 namespace Sistema;
 public class Alerta
 {
-    string nombreBoton;
+    int idBoton;
     string codigo;
-    public string NombreBoton => nombreBoton;
-    public string Codigo => codigo;
-    public Alerta(string nombreBoton, string codigo)
+    public byte[] Data =>
+        Encoding.UTF8.GetBytes($"{idBoton} - {codigo}<|EOM|>");
+    
+    public Alerta(int idBoton, string codigo)
     {
-        this.nombreBoton = nombreBoton;
+        this.idBoton = idBoton;
         this.codigo = codigo;
     }
 }

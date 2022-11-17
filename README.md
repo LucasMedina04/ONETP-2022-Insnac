@@ -17,7 +17,7 @@ git clone https://github.com/LucasMedina04/ONETP-2022-Insnac
 
 ### Pre-requisitos 📋
 
-- .NET 7.0.0 (SDK .NET 7.0.100) - [Descargar](https://dotnet.microsoft.com/download/dotnet/7.0)
+- .NET 6.0.1 (SDK .NET 6.0.300) - [Descargar](https://dotnet.microsoft.com/download/dotnet/6.0)
 
 ## Despliegue 📦
 
@@ -31,7 +31,7 @@ _Agrega notas adicionales sobre que cosas se debe instalar, configurar y como ha
 
 ## Autores ✒️
 
-* **Lucas Medina** - *Desarrollo* - [LucasMedina04](https://github.com/LucasMedina04)
-* **Martín Morandini** - *Desarrollo* - [MMorandiniGit](https://github.com/MMorandiniGit)
-* **Lucas Felix** - *Desarrollo* - [LucasFelix240](https://github.com/LucasFelix240)
+* **Lucas Medina** - *Desarrollo, documentación* - [LucasMedina04](https://github.com/LucasMedina04)
+* **Martín Morandini** - *Desarrollo, documentación* - [MMorandiniGit](https://github.com/MMorandiniGit)
+* **Lucas Felix** - *Desarrollo, documentación* - [LucasFelix240](https://github.com/LucasFelix240)
 

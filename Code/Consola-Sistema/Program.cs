@@ -1,6 +1,9 @@
-﻿bool keep = false;
+﻿using Sistema;
+using System.Net;
 
-while (!keep)
-{
-    
-}
+IPAddress address = IPAddress.Parse("10.120.2.122");
+var addresses = new List<IPAddress>();
+addresses.Add(address);
+Sistema.Sistema sistema = new Sistema.Sistema(addresses);
+
+sistema.Test(sistema.Clientes[0] ,new Alerta(1,"cd-blue"));
