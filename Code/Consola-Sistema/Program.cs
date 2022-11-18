@@ -1,9 +1,36 @@
-﻿using Sistema;
-using System.Net;
+﻿using SuperSimpleTcp;
+using System.Diagnostics;
+using System.Text;
 
-IPAddress address = IPAddress.Parse("127.0.0.1");
-var addresses = new List<IPAddress>();
-addresses.Add(address);
-Sistema.Sistema sistema = new Sistema.Sistema(addresses);
+void Main(string[] args)
+{
+    // instantiate
+    SimpleTcpClient client = new SimpleTcpClient("127.0.0.1:9000");
 
-sistema.Test(sistema.Clientes[0] , new Alerta(1,"cd-blue"));
+    // set events
+    client.Events.Connected += Connected;
+    client.Events.Disconnected += Disconnected;
+    client.Events.DataReceived += DataReceived;
+
+    // let's go!
+    client.Connect();
+
+    // once connected to the server...
+    client.Send("Hello, world!");
+    Console.ReadKey();
+}
+
+static void Connected(object sender, ConnectionEventArgs e)
+{
+    Console.WriteLine($"*** Server {e.IpPort} connected");
+}
+
+static void Disconnected(object sender, ConnectionEventArgs e)
+{
+    Console.WriteLine($"*** Server {e.IpPort} disconnected");
+}
+
+static void DataReceived(object sender, DataReceivedEventArgs e)
+{
+    Console.WriteLine($"[{e.IpPort}] {Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count)}");
+}
