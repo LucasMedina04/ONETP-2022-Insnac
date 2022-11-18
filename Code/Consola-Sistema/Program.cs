@@ -1,36 +1,12 @@
-﻿using SuperSimpleTcp;
-using System.Diagnostics;
-using System.Text;
+﻿using Sistema;
 
-void Main(string[] args)
-{
-    // instantiate
-    SimpleTcpClient client = new SimpleTcpClient("127.0.0.1:9000");
+List<string> list = new List<string>();
+list.Add("127.0.0.1");
 
-    // set events
-    client.Events.Connected += Connected;
-    client.Events.Disconnected += Disconnected;
-    client.Events.DataReceived += DataReceived;
+Sistema.Sistema sistema = new(list);
 
-    // let's go!
-    client.Connect();
+Task t = new Task( () => sistema.Escuchar());
 
-    // once connected to the server...
-    client.Send("Hello, world!");
-    Console.ReadKey();
-}
+Thread.Sleep(5000);
 
-static void Connected(object sender, ConnectionEventArgs e)
-{
-    Console.WriteLine($"*** Server {e.IpPort} connected");
-}
-
-static void Disconnected(object sender, ConnectionEventArgs e)
-{
-    Console.WriteLine($"*** Server {e.IpPort} disconnected");
-}
-
-static void DataReceived(object sender, DataReceivedEventArgs e)
-{
-    Console.WriteLine($"[{e.IpPort}] {Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count)}");
-}
+sistema.Test(sistema.Clientes[0], new Alerta(1, "codigo"));

@@ -1,18 +1,41 @@
-using System.Net;
-using System.Net.Sockets;
+using SuperSimpleTcp;
+using System.Text;
 
 namespace Sistema;
 
 public class Cliente
 {
-    Socket socket;
-    IPEndPoint endpoint;
-    public IPEndPoint Endpoint => endpoint;
-    public Socket Socket => socket;
-
-    public Cliente(IPEndPoint endpoint)
+    SimpleTcpClient client;
+    string ip;
+    public string Ip => ip;
+    public Cliente(string ip)
     {
-        this.endpoint = endpoint;
-        socket = new Socket(endpoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+        this.ip = ip;
+        client = new SimpleTcpClient(ip, 9000);
+        client.Events.Connected += Connected;
+        client.Events.Disconnected += Disconnected;
+        client.Events.DataReceived += DataReceived;
+    }
+
+    public void Enviar(string datosAEnviar)
+    {
+        client.Connect();
+
+        client.Send(datosAEnviar);
+    }
+
+    void Connected(object sender, ConnectionEventArgs e)
+    {
+        Console.WriteLine($"*** Server {e.IpPort} connected");
+    }
+
+    void Disconnected(object sender, ConnectionEventArgs e)
+    {
+        Console.WriteLine($"*** Server {e.IpPort} disconnected");
+    }
+
+    void DataReceived(object sender, DataReceivedEventArgs e)
+    {
+        Console.WriteLine($"[{e.IpPort}] {Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count)}");
     }
 }

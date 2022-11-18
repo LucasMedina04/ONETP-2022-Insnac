@@ -1,71 +1,66 @@
-﻿using System.Net;
-using System.Net.Sockets;
+﻿using SuperSimpleTcp;
 using System.Text;
 
 namespace Sistema;
 public class Sistema
 {
+    SimpleTcpServer serverSistema;
+    SimpleTcpClient clienteSistema;
     public List<Cliente> Clientes;
-    public Sistema(List<IPAddress> addresses)
+    public Sistema(List<string> addresses)
     {
+        // configuracion de clienteSistema
+        serverSistema = new SimpleTcpServer("127.0.0.1:9000");
+        clienteSistema = new SimpleTcpClient("127.0.0.1:9000");
+
+        clienteSistema.Events.Connected += Connected;
+        clienteSistema.Events.Disconnected += Disconnected;
+        clienteSistema.Events.DataReceived += DataReceived;
+
+        serverSistema.Events.ClientConnected += ClientConnected;
+        serverSistema.Events.ClientDisconnected += ClientDisconnected;
+        serverSistema.Events.DataReceived += DataReceivedServer;
+
+        // configuracion de clientes externos
         Clientes = new List<Cliente>();
         foreach (var address in addresses)
-            Clientes.Add(new Cliente(new IPEndPoint(address, 50000)));
+            Clientes.Add(new Cliente(address));
     }
-    private async void Escuchar()
+    // configuracion de cliente
+    void Connected(object sender, ConnectionEventArgs e)
+        => Console.WriteLine($"*** Server {e.IpPort} connected");
+    void Disconnected(object sender, ConnectionEventArgs e)
+        => Console.WriteLine($"*** Server {e.IpPort} disconnected");
+    void DataReceived(object sender, DataReceivedEventArgs e)
+        => Console.WriteLine($"[{e.IpPort}] {Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count)}");
+
+    // configuracion de servidor
+    void ClientConnected(object sender, ConnectionEventArgs e)
+        => Console.WriteLine($"[{e.IpPort}] client connected");
+    void ClientDisconnected(object sender, ConnectionEventArgs e)
+        => Console.WriteLine($"[{e.IpPort}] client disconnected: {e.Reason}");
+    void DataReceivedServer(object sender, DataReceivedEventArgs e)
+        => Guardar($"{e.IpPort}: {Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count)}");
+
+    public void Escuchar()
     {
-        Socket listener = new Socket(this.Clientes[0].Socket.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-        listener.Bind(this.Clientes[0].Endpoint);
-        listener.Listen(50000);
-        
-        var handler = await listener.AcceptAsync();
-        while (true)
-        {
-            var buffer = new byte[1_024];
-            var received = await handler.ReceiveAsync(buffer, SocketFlags.None);
-            var response = Encoding.UTF8.GetString(buffer, 0, received);
-            
-            var eom = "<|EOM|>";
-            if (response.IndexOf(eom) > -1 /* is end of message */)
-            {
-                Console.WriteLine(
-                    $"Socket server received message: \"{response.Replace(eom, "")}\"");
-
-                var ackMessage = "<|ACK|>";
-                var echoBytes = Encoding.UTF8.GetBytes(ackMessage);
-                await handler.SendAsync(echoBytes, 0);
-                Console.WriteLine(
-                    $"Socket server sent acknowledgment: \"{ackMessage}\"");
-
-                break;
-            }
-        }
-
+        serverSistema.Start();
+        serverSistema.Send("[ClientIp:Port]", "Connected");
     }
 
-    private async void Enviar(Cliente cliente, Alerta alerta)
+    public void Enviar(Cliente cliente, string datosAEnviar)
     {
-        var cl = cliente.Socket;
-        while (true)
-        {
-            await cl.ConnectAsync(cliente.Endpoint);
-            var msg = alerta.Data;
-            await cl.SendAsync(msg, SocketFlags.None);
+        clienteSistema = new SimpleTcpClient(cliente.Ip, 9000);
+        clienteSistema.Connect();
 
-            var buffer = new byte[1_024];
-            var received = await cl.ReceiveAsync(buffer, SocketFlags.None);
-            var response = Encoding.UTF8.GetString(buffer, 0, received);
-            if (response.Length > 0)
-            {
-                Console.WriteLine(response);
-                break;
-            }
-        }
-        cl.Shutdown(SocketShutdown.Both);
+        clienteSistema.Send(datosAEnviar);
     }
-    public void Test(Cliente cl, Alerta alerta)
+    public void Guardar(string datos)
     {
-        Enviar(cl, alerta);
-        Thread.Sleep(5000);
+        Console.WriteLine(datos);
+    }
+    public void Test(Cliente cliente, Alerta alerta)
+    {
+        Enviar(cliente, alerta.Data);
     }
 }

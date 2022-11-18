@@ -5,8 +5,7 @@ public class Alerta
 {
     int idBoton;
     string codigo;
-    public byte[] Data =>
-        Encoding.UTF8.GetBytes($"{idBoton} - {codigo}<|EOM|>");
+    public string Data => $"{idBoton} - {codigo}";
     
     public Alerta(int idBoton, string codigo)
     {

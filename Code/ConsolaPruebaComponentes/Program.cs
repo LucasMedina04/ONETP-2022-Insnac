@@ -1,36 +1,27 @@
-﻿using System.Net;
-using System.Net.Sockets;
+﻿using SuperSimpleTcp;
 using System.Text;
 
-IPAddress Ip = IPAddress.Parse("127.0.0.1"); // coloca ip emisor aca
+SimpleTcpClient client = new SimpleTcpClient("127.0.0.1:9000");
 
-IPEndPoint ep = new (Ip, 50000);
+client.Events.Connected += Connected;
+client.Events.Disconnected += Disconnected;
+client.Events.DataReceived += DataReceived;
 
-Socket listener = new Socket(ep.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-listener.Bind(ep);
-listener.Listen(50000);
+client.Connect();
 
-while (true)
+client.Send("hola");
+
+static void Connected(object sender, ConnectionEventArgs e)
 {
-    Console.WriteLine("Escuchando...");
-    var handler = await listener.AcceptAsync();
-    while (true)
-    {
-        var buffer = new byte[1_024];
-        var received = await handler.ReceiveAsync(buffer, SocketFlags.None);
-        var response = Encoding.UTF8.GetString(buffer, 0, received);
-            
-        var eom = "<|EOM|>";
-        if (response.IndexOf(eom) > -1 )
-        {
-            Console.WriteLine($"Socket server received message: \"{response.Replace(eom, "")}\"");
+    Console.WriteLine($"*** Server {e.IpPort} connected");
+}
 
-            var ackMessage = "<|ACK|>";
-            var echoBytes = Encoding.UTF8.GetBytes(ackMessage);
-            await handler.SendAsync(echoBytes, 0);
-            Console.WriteLine($"Socket server sent acknowledgment: \"{ackMessage}\"");
+static void Disconnected(object sender, ConnectionEventArgs e)
+{
+    Console.WriteLine($"*** Server {e.IpPort} disconnected");
+}
 
-            break;
-        }
-    }
+static void DataReceived(object sender, DataReceivedEventArgs e)
+{
+    Console.WriteLine($"[{e.IpPort}] {Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count)}");
 }
