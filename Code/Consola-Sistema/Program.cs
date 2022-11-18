@@ -1,7 +1,7 @@
 ﻿using Sistema;
 using System.Net;
 
-IPAddress address = IPAddress.Parse("10.120.2.122");
+IPAddress address = IPAddress.Parse("127.0.0.1");
 var addresses = new List<IPAddress>();
 addresses.Add(address);
 Sistema.Sistema sistema = new Sistema.Sistema(addresses);
