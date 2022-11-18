@@ -2,8 +2,8 @@
 using System.Diagnostics;
 using System.Text;
 
-void Main(string[] args)
-{
+
+
     // instantiate
     SimpleTcpClient client = new SimpleTcpClient("127.0.0.1:9000");
 
@@ -18,7 +18,6 @@ void Main(string[] args)
     // once connected to the server...
     client.Send("Hello, world!");
     Console.ReadKey();
-}
 
 static void Connected(object sender, ConnectionEventArgs e)
 {
