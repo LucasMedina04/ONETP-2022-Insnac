@@ -65,9 +65,7 @@ public class Sistema
     }
     public void Test(Cliente cl, Alerta alerta)
     {
-        //Task a = new Task (() => Escuchar());
-        //a.Start();
         Enviar(cl, alerta);
-        Thread.Sleep(100000);
+        Thread.Sleep(5000);
     }
 }
